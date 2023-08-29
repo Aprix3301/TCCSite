@@ -1,0 +1,52 @@
+/* Reset some default styles */
+body, ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Basic styling for the game container */
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  /* Styling for player and bot hands */
+  .player, .bots {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Basic styling for cards */
+  .card {
+    width: 100px;
+    height: 150px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    user-select: none;
+  }
+  
+  /* Different colors for suits */
+  .suit-Paus { color: #333; }
+  .suit-Copas { color: #c00; }
+  .suit-Espadas { color: #000; }
+  .suit-Ouros { color: #c90; }
+  
+  /* Styling for the game board */
+  .board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

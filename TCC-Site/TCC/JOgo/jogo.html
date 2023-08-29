@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Simulator Game</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <video id="video-background" autoplay loop>
+    <source src="Fundo.mp4" type="video/mp4">
+  </video>
+  
+  <div id="blur-layer"></div>
+  <div id="game-container">
+<!--Barra de congifuração-->
+<input type="checkbox" id="hamburger">
+    <label class="hamburger-icon" for="hamburger">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+    </label>
+    
+    <nav class="menu" style="z-index: 1;">
+        <ul>
+          
+<!-- Elemento de áudio para a música -->
+<audio id="background-music" loop>
+  <!-- Deixe a tag <source> vazia por enquanto -->
+</audio>
+
+<!-- Switch toggle -->
+<div class="toggle-switch">
+  <input type="checkbox" id="music-toggle" class="toggle-checkbox">
+  <label for="music-toggle" class="toggle-label"></label>
+</div>
+            <li><a href="../Principal/TelaPrincipal.html">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Actions -->
+    <div id="action-container" class="animated-container">
+      <h2>Ações</h2>
+      <button id="school-button" class="large-button" onclick="togglePopup('school-category', 'school-button')">Faculdade</button>
+      <button id="work-button" class="large-button" onclick="togglePopup('work-category', 'work-button')">Trabalho</button>
+      <button id="minigames-button" class="large-button" onclick="togglePopup('minigames-category', 'minigames-button')">Minijogos</button>  
+    </div>
+
+    <!-- Avatar Display -->
+    <div id="player-avatar" onclick="toggleAvatarOptions()">
+      <img id="avatar-image" src="man.png" alt="Avatar do Jogador">
+    </div>
+
+    <div id="school-category" class="action-category animated-category popup-container" style="top: 32%; z-index: 1;">
+      <span class="close-button" onclick="hidePopup('school-category')">X</span>
+      <p>Escolha como você deseja estudar:</p>
+      <button id="studyButton" onclick="study()">Estudar (+10 Sabedoria)</button>
+    </div>
+  </div>
+
+
+  <div id="avatar-options" class="avatar-options">
+    <img src="man.png" alt="Avatar 1" onclick="changeAvatar('man.png')" />
+    <img src="man2.jpeg" alt="Avatar 2" onclick="changeAvatar('man2.jpeg')">
+    <img src="Woman.jpeg" alt="Avatar 3" onclick="changeAvatar('Woman.jpeg')" />
+    <img src="woman2.jpeg" alt="Avatar 4" onclick="changeAvatar('woman2.jpeg')">
+    <img src="woman3.jpeg" alt="Avatar 5" onclick="changeAvatar('woman3.jpeg')">
+    <img src="Batman.jpeg" alt="Avatar 6" onclick="changeAvatar('Batman.jpeg')" />
+    <img src="Astronauta.jpeg" alt="Avatar 7" onclick="changeAvatar('TCC/JOgo/img/Astronauta.jpeg')" />
+  </div>
+
+
+  </div>
+  <div id="work-category" class="action-category animated-category popup-container" style="top: 51%; z-index: 1;">
+    <span class="close-button" onclick="hidePopup('work-category')">X</span>
+    <p>Selecione um novo emprego:</p>
+    <select id="jobSelect">
+      <option value="Mendigo">Mendigo</option>
+      <option value="Assistente de Escritório">Assistente de Escritório</option>
+      <option value="Programador">Programador</option>
+      <option value="Engenheiro de Software">Engenheiro de Software</option>
+    </select>
+    <button id="changeJobSelectButton">Mudar de Emprego</button>
+    <button id="goToWorkButton">Ir Trabalhar</button>
+  </div>
+  <!-- Minigames -->
+  <div id="minigames-category" class="action-category animated-category popup-container" style="top: 67%; z-index: 1;">
+    <span class="close-button" onclick="hidePopup('minigames-category')">X</span>
+    <p>Jogar um minigame: </p>
+    <button onclick="playBasketballMinigame()">Jogar Minijogo de Basquete</button>
+    <button onclick="playMusicGame()">Jogar Minijogo de Música</button>
+    <button onclick="playTrucoMinigame()">Jogar Truco</button>
+  </div>
+  <!-- Fechar Pop Up -->
+  <div id="hide-category">
+  </div>
+  </div>
+
+<!-- Status -->
+<div id="status-container" class="animated-container">
+  <h2>Status</h2>
+  <p>Sabedoria: <span id="wisdom">0</span></p>
+  <p>Emprego: <span id="job">Desempregado</span></p>
+  <p>Dinheiro: $<span id="money">0.00</span></p>
+  <p>Felicidade: <span id="happiness">100.00</span>% <i class="fas fa-heart"></i></p>
+  <p>Status: <span id="status">Feliz</span></p>
+  <p>Metas alcançadas: <span id="goal-status">Não alcançado</span></p>
+</div>
+
+
+  <!-- Shop -->
+  <button id="shop-button" onclick="togglePopup('shop-items')" class="shop-button">Ir ao SHOPPING</button>
+  <div id="shop-category" class="action-category animated-category shop-container" style="height: 300px; width: 300px; top: 25%;">
+    <span class="close-button" onclick="hidePopup('shop-category')">X</span>
+    <button onclick="togglePopup('Roupa-category')">Loja de Roupas</button>  
+    <button onclick="togglePopup('shopEletronico-category')">Loja de Eletrônicos</button>  
+    <button onclick="togglePopup('shopImovel-category')">Loja de Imóveis</button>
+    <button onclick="togglePopup('shopAutomovel-category')">Loja de Automóveis</button>
+    <button onclick="togglePopup('Supremos-category')">Loja Extras </button>
+  </div>
+
+  <div id="Roupa-category" class="action-category animated-category shop-container" style="left: 73.8%; top: 60%;">
+    <span class="close-button" onclick="hidePopup('Roupa-category')">X</span>
+    <p>Itens da Loja de Roupas:</p>
+
+<!--Camisas-->
+    <img src="camisaCoracao.jpg" alt="Item-Roupa 1" style="width: 50px;" />
+    <button onclick="buyItem({ name: 'Camisa do seu time de coração', cost: 8, increase: 2 })">
+      Camisa do seu time de coração ($8)
+    </button>
+
+    <img src="camisaBanda.png" alt="Item-Roupa 2" style="width: 50px;">
+    <button onclick="buyItem({ name: 'Camisa de banda', cost: 8, increase: 2 })">
+      Camisa de banda ($8)
+    </button>
+       
+    <button onclick="buyItem({ name: 'Blusa da Supreme', cost: 900, increase: 7 })">
+      Blusa da Supreme ($900)
+    </button>
+
+    <button onclick="buyItem({ name: 'Jordan S', cost: 1000, increase: 8 })">
+      Jordan S ($1.000)
+    </button>
+
+    <button onclick="buyItem({ name: 'Bolsa Balenciaga', cost: 3000, increase: 8 })">
+      Bolsa Balenciaga ($3.000)
+    </button>
+
+  
+  </div>>
+
+<!-- Categorias de Itens - Loja de Eletrônicos -->
+<div id="shopEletronico-category" class="action-category animated-category shop-container "style="left: 73.8%; top: 60%;">
+  <span class="close-button" onclick="hidePopup('shopEletronico-category')">X</span>
+  <p>Itens da Loja de Eletrônicos:</p>  
+
+<!--Televisão-->
+  <img src="tvTubo.jpg" alt="Item-Eletronico 1" style="width: 50px;">
+  <button onclick="buyItem({ name: 'TV de tubo', cost: 80, increase: 1 })">
+    <i class="fas fa-tv"></i> TV de tubo ($80)
+  </button>
+
+  
+    <!--Celular-->
+  <button onclick="buyItem({ name: 'Celular da ASUS', cost: 120, increase: 3 })">
+    <i class="fas fa-mobile"></i> Celular da ASUS ($120)
+  </button>
+
+  <button onclick="buyItem({ name: 'IPhone', cost: 920, increase: 7 })">
+    <i class="fas fa-mobile-alt"></i> IPhone ($920)
+  </button>
+
+  <!--Computadores-->
+
+  <button onclick="buyItem({ name: 'Computador', cost: 89, increase: 2 })">
+    <i class="fas fa-desktop"></i> Comprar Computador ($89)
+  </button>
+  
+  <button onclick="buyItem({ name: 'Console de jogos', cost: 350, increase: 4 })">
+    <i class="fas fa-gamepad"></i> Console de jogos ($350)
+  </button>
+  
+  <button onclick="buyItem({ name: 'PC Gamer', cost: 400, increase: 7 })">
+    <i class="fas fa-desktop"></i> PC Gamer ($400)
+  </button>
+</div>
+
+<!-- Categorias de Itens - Loja de Imovel -->
+<div id="shopImovel-category" class="action-category animated-category shop-container "style="left: 73.8%; top: 60%;">
+  <span class="close-button" onclick="hidePopup('shopImovel-category')">X</span>
+  <p>Itens da Loja de Imoveis:</p>
+ 
+  <!--Apartamento e Casas-->
+  <button onclick="buyItem({ name: 'Apartamento longe da faculdade', cost: 400, increase: 6 })">
+    <i class="fas fa-building"></i> Apartamento longe da faculdade
+    ($400)
+  </button>
+  
+  <button onclick="buyItem({ name: 'Apartamento próximo à faculdade', cost: 990, increase: 9 })">
+    <i class="fas fa-building"></i> Apartamento próximo à faculdade
+    ($990)
+  </button>
+  
+  <button onclick="buyItem({ name: 'Casa Própria', cost: 10000, increase: 11 })">
+    <i class="fas fa-home"></i> Casa Própria ($10.000)
+  </button>
+  <button onclick="buyItem({name: 'Mansão', cost: 500000, increase: 20 })">
+    <i class="fas fa-castle"></i> Mansão ($500.000)
+  </button>
+</div>
+
+<!-- Categorias de Itens - Loja de Automovel -->
+<div id="shopAutomovel-category" class="action-category animated-category shop-container "style="left: 73.8%; top: 60%;">
+  <span class="close-button" onclick="hidePopup('shopAutomovel-category')">X</span>
+  <p>Itens da Loja de Automóveis:</p>
+  
+<!--Carros/Motos-->
+  <button onclick="buyItem({ name: 'Fiat Uno', cost: 500, increase: 6 })">
+    <i class="fas fa-car"></i> Comprar Fiat Uno ($500)
+  </button>
+
+  <button onclick="buyItem({ name: 'Lambreta', cost: 299, increase: 5 })">
+    <i class="fas fa-motorcycle"></i> Lambreta ($299)
+  </button>
+
+  <button onclick="buyItem({ name: 'Hornet', cost: 1000, increase: 10 })">
+    <i class="fas fa-motorcycle"></i> Hornet ($1.000)
+  </button>
+
+</div>
+
+<!--Extras-->
+<div id="Supremos-category" class="action-category animated-category shop-container " style=" left: 73.8%; top: 60%;">
+  <span class="close-button" onclick="hidePopup('Supremos-category')">X</span>
+  <p>Itens Supremos-category:</p>
+ 
+  <button onclick="buyItem({ name: 'Twitter', cost: 100050, increase: 20 })">
+    Twitter ($100.050)
+  </button>
+
+</div>>
+
+
+
+  <script src="Script2.js"></script>
+
+
+</body>
+
+
+</html>
